@@ -44,4 +44,6 @@ $ pip install -r requirements.txt
 ```
 
 ## Project Status
-🟡 **Milestone 1** — Project proposal and literature review complete. Model development in progress.
+* 🟡 **Milestone 1** — Project proposal and literature review complete. Model development in progress.
+* 🟡 **Milestone 2** — [upcoming: 3/22/2026]
+* 🟡 **Final Deadline** — [upcoming: 5/17/2026]
