@@ -1,6 +1,6 @@
 # Deep Learning Classification of Skin Lesions Using the ISIC 2019 Challenge Dataset
 
-DS 6050 - ML III: Deep Learning | University of Virginia, School of Data Science
+DS 6050 | University of Virginia, School of Data Science
 
 ## Table of Contents
 * [Team](#team)
