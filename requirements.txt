@@ -1,0 +1,14 @@
+# auto-create this file at project end: 
+# pip freeze > requirements.txt
+
+torch
+torchvision
+albumentations
+optuna
+wandb
+hydra-core
+pandas
+numpy
+matplotlib
+scikit-learn
+Pillow
