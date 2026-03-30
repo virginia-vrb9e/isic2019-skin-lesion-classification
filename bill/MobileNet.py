@@ -41,6 +41,23 @@ pool → Conv1×1(576→1024) → HardSwish → Dropout → FC,
 replacing V2's simpler pool → flatten → dropout → FC. 
 The public API (average_pooling, dropout, linear_transformation) is preserved.
 '''
+
+'''
+Neural network with this pipeline:
+    Input image
+     → Initial conv
+     → Inverted residual blocks (core backbone)
+     → Final conv
+     → Global average pooling
+     → Classifier head
+     → Output (class scores)
+
+MobileNetV3 improves over earlier versions by:
+Better activations (HardSwish)
+Attention (SE blocks)
+Smarter block design
+'''
+
 # A cheap approximation of the sigmoid function used in MobileNetV3
 # True sigmoid: σ(x)=1/(1+e^(-x) )
 # expensive due to the exponential
@@ -67,15 +84,23 @@ class HardSwish(nn.Module):
 
 # SE attention mechanism from the paper: "Squeeze-and-Excitation Networks"
 # Let the network learn which channels are important
+#
 class SqueezeExcitation(nn.Module):
     def __init__(self, in_channels, reduced_dim):
         super(SqueezeExcitation, self).__init__()
+
+        # in_channels: input feature channels
+        # reduced_dim: smaller hidden layer size
 
         # Squeeze: global average pool then two FC layers with ReLU and HardSigmoid
         # Feature map [B, C, H, W]
         # Global average pooling: [B, C, H, W] → [B, C, 1, 1]
         #   Each channel becomes one number
         # Two 1×1 convolutions act like fully connected layers: Conv2d...
+        # nn.Conv2d ... Reduce channels (compression)
+        # nn.relu ... non-linearity
+        # nn.Conv2d(... Expand back to original channels
+        # HardSigmoid...Produce weights in [0, 1]
 
         self.squeeze_excitation = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -93,6 +118,9 @@ class SqueezeExcitation(nn.Module):
 # The name comes from inverting the usual bottleneck structure.
 # Traditional CNN bottleneck: wide → narrow → wide
 # Inverted bottleneck: narrow → wide → narrow (saves computation)
+# •	expand_ratio: controls channel expansion
+# •	use_se: include attention block
+# •	use_hs: use HardSwish instead of ReLU
 
 class InvertedResidual(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
@@ -102,7 +130,9 @@ class InvertedResidual(nn.Module):
         # Residual connection is used when stride is 1 and channels match
         self.residual_will_be_used = stride == 1 and in_channels == out_channels
 
+        # expand channels internally
         hidden_dim = int(in_channels * expand_ratio)
+        # choose activation type
         activation = HardSwish(inplace=True) if use_hs else nn.ReLU(inplace=True)
 
         list_of_layers = []
@@ -258,6 +288,7 @@ class MobileNet(nn.Module):
         self.sequential = nn.Sequential(*list_of_layers)
 
         # ── Final convolution (1×1, HardSwish) ──────────────────────────────
+        # expands feature channels
         if width_mult > 1.0:
             number_of_output_channels_in_final_convolution = int(576 * width_mult)
         else:
@@ -292,8 +323,8 @@ class MobileNet(nn.Module):
             HardSwish(inplace=True)
         )
 
+        # final layers
         self.dropout = nn.Dropout(dropout_prob)
-
         self.linear_transformation = nn.Linear(1024, num_classes)
 
         self.initialize_weights()
