@@ -1,0 +1,6 @@
+wandb_version: 1
+
+freeze_bb:
+  value: false
+loss_fn:
+  value: weighted_ce

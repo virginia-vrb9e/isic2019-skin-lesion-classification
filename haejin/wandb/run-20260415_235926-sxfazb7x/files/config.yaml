@@ -1,0 +1,125 @@
+_wandb:
+    value:
+        cli_version: 0.25.1
+        e:
+            7be8k9yn138bogost6zt4gsdwugfaohu:
+                codePath: EfficientNet_B0.ipynb
+                codePathLocal: EfficientNet_B0.ipynb
+                cpu_count: 32
+                cpu_count_logical: 32
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "706906132480"
+                        used: "527208660992"
+                email: umw7eg@virginia.edu
+                executable: /apps/software/standard/core/jupyterlab/4.4.6-py3.12/bin/python3.12
+                git:
+                    commit: b0f8d1a842cb48cf2450f0a82ec510a4d04566f3
+                    remote: https://github.com/virginia-vrb9e/isic2019-skin-lesion-classification.git
+                gpu: NVIDIA GeForce RTX 3090
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 10496
+                      memoryTotal: "25769803776"
+                      name: NVIDIA GeForce RTX 3090
+                      uuid: GPU-e503b493-5aec-e891-ceca-fb8dd829efbb
+                host: udc-an28-13
+                memory:
+                    total: "135020183552"
+                os: Linux-4.18.0-553.47.1.el8_10.x86_64-x86_64-with-glibc2.28
+                program: EfficientNet_B0.ipynb
+                python: CPython 3.12.12
+                root: /sfs/gpfs/tardis/home/umw7eg/isic2019-skin-lesion-classification/haejin
+                slurm:
+                    cluster_name: shen
+                    conf: /opt/slurm/current/etc/slurm.conf
+                    cpus_on_node: "8"
+                    cpus_per_task: "8"
+                    export_env: NONE
+                    get_user_env: "1"
+                    gpus_on_node: "1"
+                    gtids: "0"
+                    job_account: shakeri_ds6050
+                    job_cpus_per_node: "8"
+                    job_end_time: "1776324390"
+                    job_gid: "100"
+                    job_gpus: "3"
+                    job_id: "11719088"
+                    job_name: ood_jupyter
+                    job_nodelist: udc-an28-13
+                    job_num_nodes: "1"
+                    job_partition: interactive-rtx3090
+                    job_qos: class
+                    job_start_time: "1776309989"
+                    job_uid: "15696830"
+                    job_user: umw7eg
+                    jobid: "11719088"
+                    localid: "0"
+                    mem_per_node: "10240"
+                    nnodes: "1"
+                    nodeid: "0"
+                    nodelist: udc-an28-13
+                    oom_kill_step: "0"
+                    prio_process: "0"
+                    procid: "0"
+                    submit_dir: /var/www/ood/apps/sys/dashboard
+                    submit_host: udc-ba37-31c1
+                    task_pid: "634724"
+                    tasks_per_node: "1"
+                    topology_addr: udc-an28-13
+                    topology_addr_pattern: node
+                    tres_per_task: cpu=8
+                startedAt: "2026-04-16T03:59:26.832949Z"
+                writerId: 7be8k9yn138bogost6zt4gsdwugfaohu
+        m: []
+        python_version: 3.12.12
+        t:
+            "1":
+                - 1
+                - 5
+                - 41
+                - 49
+                - 53
+                - 63
+            "2":
+                - 1
+                - 5
+                - 41
+                - 49
+                - 53
+                - 63
+            "3":
+                - 13
+                - 16
+            "4": 3.12.12
+            "5": 0.25.1
+            "8":
+                - 1
+            "12": 0.25.1
+            "13": linux-x86_64
+architecture:
+    value: efficientnet_bo
+augmentation:
+    value: standard
+batch_size:
+    value: 32
+epochs:
+    value: 30
+freeze_bb:
+    value: true
+img_size:
+    value: 224
+loss_fn:
+    value: weighted_ce
+lr:
+    value: 0.0001
+patience:
+    value: 10
+pretrained:
+    value: true
+seed:
+    value: 42
+val_split:
+    value: 0.2

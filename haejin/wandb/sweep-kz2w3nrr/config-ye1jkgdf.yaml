@@ -1,0 +1,6 @@
+wandb_version: 1
+
+freeze_bb:
+  value: true
+loss_fn:
+  value: focal
