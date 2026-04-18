@@ -1,0 +1,19 @@
+2026-04-18 07:34:39,722 | INFO | 
+Starting Main Script...
+2026-04-18 07:34:39,722 | INFO | Config: {'architecture': 'resnet50', 'pretrained': True, 'freeze_bb': 'full', 'num_classes': 8, 'dropout': 0.3, 'img_size': 224, 'batch_size': 32, 'epochs': 30, 'lr': 0.001, 'num_workers': 4, 'val_split': 0.2, 'seed': 42, 'data_dir': '/home/ubuntu/Downloads/ISIC_2019_mini', 'classes': ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC', 'SCC'], 'mini_run': True}
+2026-04-18 07:34:39,835 | INFO | Accelerator: cuda
+2026-04-18 07:34:39,892 | INFO | Mini_run: 2026 training samples; 506 validation samples
+2026-04-18 07:34:39,893 | INFO | 
+ResNet50 — FF Backbone
+2026-04-18 07:34:52,128 | INFO | W&B project: https://wandb.ai/vrb9e-university-of-virginia-school-of-data-science/isic-resnet50
+2026-04-18 07:34:52,129 | INFO | W&B run: https://wandb.ai/vrb9e-university-of-virginia-school-of-data-science/isic-resnet50/runs/z3nam19n
+2026-04-18 07:34:52,329 | INFO | 
+Epoch 1/2
+2026-04-18 07:34:52,330 | INFO | ------------------------------
+2026-04-18 07:35:08,191 | INFO | Train Loss: 1.3822  Train Acc: 51.97%
+2026-04-18 07:35:08,191 | INFO | Val   Loss: 1.2033  Val   Acc: 61.86%
+2026-04-18 07:35:08,192 | INFO | 
+Epoch 2/2
+2026-04-18 07:35:08,192 | INFO | ------------------------------
+2026-04-18 07:35:24,990 | INFO | Train Loss: 1.1667  Train Acc: 59.53%
+2026-04-18 07:35:24,990 | INFO | Val   Loss: 1.1165  Val   Acc: 62.25%
