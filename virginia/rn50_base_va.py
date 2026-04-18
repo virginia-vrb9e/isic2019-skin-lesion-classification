@@ -59,7 +59,7 @@ from tqdm import tqdm
         img_size, 
         val_split, 
         seed, 
-        mini-run, 
+        mini_run,
         num_classes, 
         classes
 
@@ -87,7 +87,7 @@ Config = {
     "seed":         42,
     "data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
     "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
-    "mini-run":     False,  # True = use 10% of data
+    "mini_run":     False,  # True = use 10% of data
 
     # --- ablation options ---
     # "patience":     10,             # early stopping after N epochs no improvement
@@ -321,7 +321,11 @@ def main():
     parser.add_argument("--lr",         type=float, default=Config["lr"])
     parser.add_argument("--num_workers", type=int, default=Config["num_workers"])
     parser.add_argument("--wandb",      action="store_true")
+    parser.add_argument("--mini_run",   action="store_true", help="Use 10% of dataset")
     args = parser.parse_args()
+
+    if args.mini_run:
+        Config["mini_run"] = True
 
     print("\nStarting Main Script...")
     print(f"Config: {Config}")
@@ -329,10 +333,10 @@ def main():
     device, base_ds, train_idx, val_idx = set_up(
         seed=Config["seed"], data_dir=args.data_dir,
     )
-    if Config.get("mini-run"):
+    if Config.get("mini_run"):
         train_idx = train_idx[:len(train_idx)//10]
         val_idx = val_idx[:len(val_idx)//10]
-        print(f"Mini-run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
+        print(f"Mini_run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
     train_loader, val_loader = make_loaders(
         base_ds, train_idx, val_idx,
         seed=Config["seed"], batch_size=args.batch_size,
