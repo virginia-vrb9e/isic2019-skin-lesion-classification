@@ -360,6 +360,9 @@ def main():
         train_idx = train_idx[:len(train_idx)//10]
         val_idx = val_idx[:len(val_idx)//10]
         logger.info(f"Mini_run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
+    else:
+        logger.info(f"Full run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
+
     train_loader, val_loader = make_loaders(
         base_ds, train_idx, val_idx,
         seed=Config["seed"], batch_size=args.batch_size,
@@ -379,8 +382,10 @@ def main():
 
     if args.wandb:
         import wandb
-        wandb.init(project="isic-resnet50", config={**Config, "mode": tag})
-
+        run = wandb.init(project="isic-resnet50", config={**Config, "mode": tag})
+        logger.info(f"W&B project: {run.get_project_url()}")
+        logger.info(f"W&B run: {run.get_url()}")
+    
     history = train_model(
         device, model, train_loader, val_loader,
         num_epochs=args.num_epochs, lr=args.lr,
