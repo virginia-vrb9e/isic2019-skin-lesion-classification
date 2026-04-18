@@ -37,6 +37,29 @@ from tqdm import tqdm
 # ├── VASC/
 # └── SCC/
 
+# -------
+# Set up logging
+# -------
+import logging
+import sys
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+if not logger.handlers:
+
+    console_handler = logging.StreamHandler(sys.stdout)  # ← fix
+    file_handler = logging.FileHandler("run.log")
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(message)s"
+    )
+
+    console_handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+
 
 # -------
 # Config
@@ -206,7 +229,7 @@ def set_seeds_to(seed):
 def set_up(seed, data_dir):
     set_seeds_to(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Accelerator: {device}")
+    logger.info(f"Accelerator: {device}")
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     base_ds = datasets.ImageFolder(data_dir)
@@ -274,8 +297,8 @@ def train_model(device, model, train_loader, val_loader,
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
 
     for epoch in range(num_epochs):
-        print(f"\nEpoch {epoch+1}/{num_epochs}")
-        print("-" * 30)
+        logger.info(f"\nEpoch {epoch+1}/{num_epochs}")
+        logger.info("-" * 30)
         train_loss, train_acc = train_epoch(
             model, train_loader, criterion, optimizer, device, feature_extract,
         )
@@ -284,8 +307,8 @@ def train_model(device, model, train_loader, val_loader,
         history["train_acc"].append(train_acc)
         history["val_loss"].append(val_loss)
         history["val_acc"].append(val_acc)
-        print(f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.2f}%")
-        print(f"Val   Loss: {val_loss:.4f}  Val   Acc: {val_acc:.2f}%")
+        logger.info(f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.2f}%")
+        logger.info(f"Val   Loss: {val_loss:.4f}  Val   Acc: {val_acc:.2f}%")
 
     return history
 
@@ -327,8 +350,8 @@ def main():
     if args.mini_run:
         Config["mini_run"] = True
 
-    print("\nStarting Main Script...")
-    print(f"Config: {Config}")
+    logger.info("\nStarting Main Script...")
+    logger.info(f"Config: {Config}")
 
     device, base_ds, train_idx, val_idx = set_up(
         seed=Config["seed"], data_dir=args.data_dir,
@@ -336,7 +359,7 @@ def main():
     if Config.get("mini_run"):
         train_idx = train_idx[:len(train_idx)//10]
         val_idx = val_idx[:len(val_idx)//10]
-        print(f"Mini_run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
+        logger.info(f"Mini_run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
     train_loader, val_loader = make_loaders(
         base_ds, train_idx, val_idx,
         seed=Config["seed"], batch_size=args.batch_size,
@@ -346,7 +369,7 @@ def main():
     feature_extract = Config["freeze_bb"]
     tag = feature_extract  # "full", "partial", or "none"
     labels = {"full": "FF Backbone", "partial": "PF Backbone", "none": "Fully UF Backbone"}
-    print(f"\nResNet50 — {labels[feature_extract]}")
+    logger.info(f"\nResNet50 — {labels[feature_extract]}")
 
     model = get_pretrained_model(
         num_classes=Config["num_classes"],
