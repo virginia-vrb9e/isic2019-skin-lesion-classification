@@ -3,9 +3,9 @@ rn50_base_va.py
 Baseline ResNet-50 training script
 
 Usage:
-    python rn50_baseline_va.py                                  # local, mini dataset
-    python rn50_baseline_va.py --data_dir /path/to/data         # custom data path
-    python rn50_baseline_va.py --data_dir /path/to/data --wandb # with W&B logging
+    python rn50_base_va.py                                  # local, mini dataset
+    python rn50_base_va.py --data_dir /path/to/data         # custom data path
+    python rn50_base_va.py --data_dir /path/to/data --wandb # with W&B logging
 """
 
 import os
