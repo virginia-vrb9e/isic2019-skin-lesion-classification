@@ -341,7 +341,7 @@ def main():
 
     feature_extract = Config["freeze_bb"]
     tag = feature_extract  # "full", "partial", or "none"
-    labels = {"full": "FF Backbone", "partial": "PF Backbone", "none": "Fully UF Backbone"}
+    labels = {"full": "Fully Frozen Backbone", "partial": "Partially Frozen Backbone", "none": "Unfrozen Backbone"}
     print(f"\nResNet50 — {labels[feature_extract]}")
 
     model = get_pretrained_model(
@@ -352,7 +352,7 @@ def main():
 
     if args.wandb:
         import wandb
-        wandb.init(project="isic-resnet50", config={**Config, "mode": tag})
+        wandb.init(project="isic-resnet50", name=f"rn50_{labels[feature_extract]}_ep{args.num_epochs}_mini={Config.get('mini-run')}", config={**Config, "mode": tag})
 
     history = train_model(
         device, model, train_loader, val_loader,
