@@ -87,7 +87,7 @@ Config = {
     "seed":         42,
     "data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
     "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
-    "mini-run":     False,  # True = use 10% of data
+    "mini-run":     True,  # True = use 10% of data
 
     # --- ablation options ---
     # "patience":     10,             # early stopping after N epochs no improvement
