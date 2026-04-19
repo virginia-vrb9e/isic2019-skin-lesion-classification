@@ -22,6 +22,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import balanced_accuracy_score, f1_score, roc_auc_score, confusion_matrix
+
 
 
 
@@ -349,29 +352,54 @@ def train_epoch(model, dataloader, criterion, optimizer, device, feature_extract
     return running_loss / len(dataloader), 100.0 * correct / total
 
 
-def evaluate(model, dataloader, criterion, device):
+def evaluate(model, dataloader, criterion, device, num_classes=Config["num_classes"]):
     model.eval()
     running_loss, correct, total = 0.0, 0, 0
+    all_preds, all_labels, all_probs = [], [], []
     with torch.no_grad():
         for inputs, labels in tqdm(dataloader, desc="Evaluating"):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             running_loss += loss.item()
+            probs = torch.softmax(outputs, dim=1)
             _, predicted = outputs.max(1)
             total += labels.size(0)
             correct += predicted.eq(labels).sum().item()
-    return running_loss / len(dataloader), 100.0 * correct / total
+            all_preds.extend(predicted.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+            all_probs.extend(probs.cpu().numpy())
+
+    all_probs = np.array(all_probs)
+    auc_per_class = []
+    for c in range(num_classes):
+        try:
+            auc_per_class.append(roc_auc_score((np.array(all_labels) == c).astype(int), all_probs[:, c]))
+        except ValueError:
+            auc_per_class.append(0.0)
+
+    return {
+        "loss": running_loss / len(dataloader),
+        "acc": 100.0 * correct / total,
+        "macro_f1": f1_score(all_labels, all_preds, average="macro"),
+        "bacc": balanced_accuracy_score(all_labels, all_preds),
+        "auc_per_class": auc_per_class,
+        "conf_matrix": confusion_matrix(all_labels, all_preds),
+    }
 
 
 def train_model(device, model, train_loader, val_loader,
-                num_epochs, lr, feature_extract="full"):
+                num_epochs, lr, feature_extract="full",
+                use_wandb=False, base_ds=None):
+    if use_wandb:
+        import wandb
     model = model.to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(
         filter(lambda p: p.requires_grad, model.parameters()), lr=lr,
     )
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
+    arch = Config["architecture"]
 
     for epoch in range(num_epochs):
         print(f"\nEpoch {epoch+1}/{num_epochs}")
@@ -379,13 +407,42 @@ def train_model(device, model, train_loader, val_loader,
         train_loss, train_acc = train_epoch(
             model, train_loader, criterion, optimizer, device, feature_extract,
         )
-        val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+        val_metrics = evaluate(model, val_loader, criterion, device)
+        val_loss = val_metrics["loss"]
+        val_acc = val_metrics["acc"]
+
         history["train_loss"].append(train_loss)
         history["train_acc"].append(train_acc)
         history["val_loss"].append(val_loss)
         history["val_acc"].append(val_acc)
+
         print(f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.2f}%")
         print(f"Val   Loss: {val_loss:.4f}  Val   Acc: {val_acc:.2f}%")
+        print(f"Val   BACC: {val_metrics['bacc']:.4f}  Val   F1: {val_metrics['macro_f1']:.4f}")
+
+        if use_wandb:
+            log_dict = {
+                "epoch": epoch + 1,
+                f"{arch}/train_loss": train_loss,
+                f"{arch}/train_acc": train_acc,
+                f"{arch}/val_loss": val_loss,
+                f"{arch}/val_acc": val_acc,
+                f"{arch}/val_macro_f1": val_metrics["macro_f1"],
+                f"{arch}/val_bacc": val_metrics["bacc"],
+            }
+            for c, auc in enumerate(val_metrics["auc_per_class"]):
+                log_dict[f"{arch}/val_auc_class_{c}"] = auc
+            wandb.log(log_dict)
+
+            fig, ax = plt.subplots(figsize=(10, 8))
+            disp = ConfusionMatrixDisplay(
+                confusion_matrix=val_metrics["conf_matrix"],
+                display_labels=base_ds.classes if base_ds else Config["classes"],
+            )
+            disp.plot(ax=ax, colorbar=False, xticks_rotation=45)
+            ax.set_title(f"Confusion Matrix — Epoch {epoch+1}")
+            wandb.log({f"{arch}/conf_matrix": wandb.Image(fig)})
+            plt.close(fig)
 
     return history
 
@@ -473,6 +530,7 @@ def main():
         device, model, train_loader, val_loader,
         num_epochs=args.num_epochs, lr=args.lr,
         feature_extract=feature_extract,
+        use_wandb=args.wandb, base_ds=base_ds,
     )
     plot_training_history(history, f"{Config['architecture']}_{tag}")
 
