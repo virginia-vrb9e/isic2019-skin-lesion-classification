@@ -2,10 +2,9 @@
 rn50_base_va.py
 Baseline ResNet-50 training script
 
-Usage:
-    python rn50_base_va.py                                  # local, mini dataset
-    python rn50_base_va.py --data_dir /path/to/data         # custom data path
-    python rn50_base_va.py --data_dir /path/to/data --wandb # with W&B logging
+With alternative architecture added in Config: 
+    "architecture": "resnet50",    # "mobilenetv3_small" | "efficientnet_b0" | "resnet50
+
 """
 
 import os
