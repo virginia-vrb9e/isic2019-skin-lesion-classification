@@ -21,6 +21,8 @@ from torchvision import datasets, transforms, models
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from sklearn.model_selection import train_test_split
+
 
 
 # ------------------------------------------------------------------
@@ -73,21 +75,24 @@ from tqdm import tqdm
 """
 # these are defaults that can be overridden by command-line arguments or ablation options in the main function
 Config = {
-    "architecture": "resnet50",
-    "pretrained":   True,
-    "freeze_bb": "full",  # "full" = freeze all, "partial" = unfreeze layer4, "none" = train everything
-    "num_classes":  8,
-    "dropout":      0.3,
+    # added from HS abl 1&2
+    "architecture": "resnet50",    # "mobilenetv3_small" | "efficientnet_b0" | "resnet50
+    
+    "pretrained":   True,           # load ImageNet weights | False = start all weights at random and train from scratch
+    "freeze_bb": "full",            # "full" = freeze all, "partial" = unfreeze layer4, "none" = train everything
+    "augmentation": "standard",     # "none" | "geometric" | "color" | "standard"
+    "num_classes":  8,              # 9: includes 'unk' or images that are none-of-the-known-classes
+    "dropout":      0.3,            # 0.0=disabled | E.g.: 0.2=20% RN features dropped b4 classification | to try: 0.05, 0.1, 0,2, 0.3, 0.4, 0.5
     "img_size":     224,
     "batch_size":   32,
     "epochs":       30,
-    "lr":           1e-3,
-    "num_workers":  4,
+    "lr":           1e-4,           # changed from original 1e-3
+    "num_workers":  4,              # may need to change this
     "val_split":    0.20,
     "seed":         42,
     "data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
     "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
-    "mini-run":     True,  # True = use 10% of data
+    "mini-run":     False,  # True = use 10% of data | False = use 100%
 
     # --- ablation options ---
     # "patience":     10,             # early stopping after N epochs no improvement
@@ -98,32 +103,85 @@ Config = {
 }
 
 
-# -----------------
-# Model Definition
-# -----------------
+# --------------------------------------------------------------------
+# Model Definition(s) - Resnet-50, EfficientNet_B0, MobileNetV3_small
+# --------------------------------------------------------------------
 
-def get_pretrained_model(num_classes=Config["num_classes"],
-                        dropout_prob=Config["dropout"],
-                        feature_extract=Config["freeze_bb"]):
-    model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+
+# -- Establishing Multi-architecture Structure to mirror HS & BL -- #
+def get_pretrained_model(arch=Config["architecture"],
+                         num_classes=Config["num_classes"],
+                         dropout_prob=Config["dropout"],
+                         feature_extract=Config["freeze_bb"]):
+
+    if arch == "resnet50":
+        model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+        final_layer = "fc"
+        partial_layers = [model.layer4]  # last layer/block
+        
+    elif arch == "mobilenetv3_small":
+        model = models.mobilenet_v3_small(weights=models.MobileNet_V3_Small_Weights.DEFAULT)
+        final_layer = "classifier"
+        partial_layers = [model.features[-1]]  # last feature block
+        
+    elif arch == "efficientnet_b0":
+        model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.DEFAULT)
+        final_layer = "classifier"
+        partial_layers = [model.features[-1]]
+        
+    else:
+        raise ValueError(f"Unsupported architecture: {arch}")
+
+    # freeze logic
     if feature_extract == "full":
         for param in model.parameters():
             param.requires_grad = False
+            
     elif feature_extract == "partial":
         for param in model.parameters():
             param.requires_grad = False
-        for param in model.layer4.parameters():
-            param.requires_grad = True
-    elif feature_extract == "none":
-        for param in model.parameters():
-            param.requires_grad = True
+        for layer in partial_layers:
+            for param in layer.parameters():
+                param.requires_grad = True
 
-    num_in_features = model.fc.in_features  # 2048 for ResNet-50
-    model.fc = nn.Sequential(
-        nn.Dropout(dropout_prob),
-        nn.Linear(num_in_features, num_classes),
-    )
+    # replace head
+    if final_layer == "fc":
+        in_features = model.fc.in_features
+        model.fc = nn.Sequential(
+            nn.Dropout(dropout_prob), 
+            nn.Linear(in_features, num_classes)
+        )
+        
+    elif final_layer == "classifier":
+        in_features = model.classifier[-1].in_features
+        model.classifier[-1] = nn.Sequential(
+            nn.Dropout(dropout_prob), 
+            nn.Linear(in_features, num_classes)
+        )
     return model
+
+# def get_pretrained_model(num_classes=Config["num_classes"],
+#                       dropout_prob=Config["dropout"],
+#                        feature_extract=Config["freeze_bb"]):
+#    model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
+#    if feature_extract == "full":
+#        for param in model.parameters():
+#            param.requires_grad = False
+#    elif feature_extract == "partial":
+#        for param in model.parameters():
+#            param.requires_grad = False
+#        for param in model.layer4.parameters():
+#            param.requires_grad = True
+#    elif feature_extract == "none":
+#        for param in model.parameters():
+#            param.requires_grad = True
+
+#    num_in_features = model.fc.in_features  # 2048 for ResNet-50
+#    model.fc = nn.Sequential(
+#        nn.Dropout(dropout_prob),
+#        nn.Linear(num_in_features, num_classes),
+#    )
+#    return model
 
 
 # -------
@@ -154,14 +212,36 @@ class TransformedSubset(Dataset):
 # Transformation & Loaders
 # -------------------------
 
-def make_transforms(image_size=Config["img_size"]):
+# adding more complex augmentation to match HS and BL code and choices
+def make_transforms(image_size=Config["img_size"], augmentation=Config.get("augmentation", "standard")):
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406],
         std=[0.229, 0.224, 0.225],
     )
+
+    if augmentation == "none":
+        aug_tfms = []
+    elif augmentation == "geometric":
+        aug_tfms = [
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.RandomRotation(20),
+        ]
+    elif augmentation == "color":
+        aug_tfms = [
+            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+        ]
+    elif augmentation == "standard":
+        aug_tfms = [
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.RandomRotation(20),
+            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+        ]
+
     train_tf = transforms.Compose([
-        transforms.RandomResizedCrop(image_size, scale=(0.8, 1.0)),
-        transforms.RandomHorizontalFlip(),
+        transforms.Resize((image_size, image_size)),
+        *aug_tfms,
         transforms.ToTensor(),
         normalize,
     ])
@@ -194,6 +274,14 @@ def make_loaders(base_ds, train_idx, val_idx, seed, batch_size, num_workers,
 # ------
 # Setup
 # ------
+"""
+Contains: 
+
+    * set seed
+    * device (cuda) check
+    * data splitting with `train_test_split`
+
+"""
 
 def set_seeds_to(seed):
     random.seed(seed)
@@ -209,16 +297,28 @@ def set_up(seed, data_dir):
     print(f"Accelerator: {device}")
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
-    base_ds = datasets.ImageFolder(data_dir)
-    g = torch.Generator().manual_seed(seed)
-    n = len(base_ds)
-    train_size = int((1 - Config["val_split"]) * n)
-    val_size = n - train_size
-    train_subset, val_subset = torch.utils.data.random_split(
-        base_ds, [train_size, val_size], generator=g,
+    base_ds = datasets.ImageFolder(data_dir)  # stratified data directory
+    targets = [s[1] for s in base_ds.samples]  # s[1] is class index --> list 'targets'
+    # new setup to match team (old commented out, for debug)
+    train_idx, val_idx = train_test_split(
+        range(len(base_ds)), 
+        test_size=Config["val_split"], 
+        stratify=targets, 
+        random_state=seed,
     )
-    return device, base_ds, train_subset.indices, val_subset.indices
-
+    
+    # g = torch.Generator().manual_seed(seed)
+    # n = len(base_ds)
+    # train_size = int((1 - Config["val_split"]) * n)
+    # val_size = n - train_size
+    # train_subset, val_subset = torch.utils.data.random_split(
+    #     base_ds, 
+    #     [train_size, val_size], 
+    #     generator=g,
+    # )
+    
+    return device, base_ds, train_idx, val_idx
+    # return device, base_ds, train_subset.indices, val_subset.indices
 
 # ----------------------
 # Training & Evaluation
@@ -342,9 +442,10 @@ def main():
     feature_extract = Config["freeze_bb"]
     tag = feature_extract  # "full", "partial", or "none"
     labels = {"full": "Fully Frozen Backbone", "partial": "Partially Frozen Backbone", "none": "Unfrozen Backbone"}
-    print(f"\nResNet50 — {labels[feature_extract]}")
+    print(f"\n{Config['architecture']} — {labels[feature_extract]}")
 
     model = get_pretrained_model(
+        arch=Config["architecture"],
         num_classes=Config["num_classes"],
         dropout_prob=Config["dropout"],
         feature_extract=feature_extract,
@@ -352,14 +453,28 @@ def main():
 
     if args.wandb:
         import wandb
-        wandb.init(project="isic-resnet50", name=f"rn50_{labels[feature_extract]}_ep{args.num_epochs}_mini={Config.get('mini-run')}", config={**Config, "mode": tag})
+        wandb.init(
+            entity="vrb9e-university-of-virginia-school-of-data-science",
+            project="ISIC2019", 
+            # adjacent string literals are concatenated automatically
+            name=(      
+                f"{Config['architecture']}"
+                f"_freeze={tag}"
+                f"_aug={Config['augmentation']}"
+                f"_drop={Config['dropout']}"
+                f"_lr={args.lr}"
+                f"_ep={args.num_epochs}"
+                f"_mini={Config.get('mini-run')}"
+            ),
+            config={**Config, "mode": tag},
+        )
 
     history = train_model(
         device, model, train_loader, val_loader,
         num_epochs=args.num_epochs, lr=args.lr,
         feature_extract=feature_extract,
     )
-    plot_training_history(history, f"ResNet50_{tag}")
+    plot_training_history(history, f"{Config['architecture']}_{tag}")
 
     if args.wandb:
         wandb.finish()
