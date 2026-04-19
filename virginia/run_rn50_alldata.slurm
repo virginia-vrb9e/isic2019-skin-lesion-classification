@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=resnet50_30ep
+#SBATCH --job-name=resnet50_30ep_alldata
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --account=shakeri_ds6050
-#SBATCH --time=4:00:00
+#SBATCH --time=3:00:00
 #SBATCH --mem=32G
 #SBATCH --cpus-per-task=2
 #SBATCH --output=resnet50_30ep_%j.log
@@ -16,14 +16,15 @@ cd $SCRIPT_DIR
 
 # --- Environment --- #
 # module load anaconda # not needed on rivanna
-source activate dl-course
+eval "$(conda shell.bash hook)"
+conda activate dl-course
 
 # --- W&B login (only needed first time; comment out after) --- #
 # wandb login YOUR_API_KEY
 
 echo "Start: $(date)"
 
-python runner_resnet50.py \
+python rn50_base_va.py \
     --data_dir $DATA_DIR \
     --num_epochs 30 \
     --batch_size 32 \
