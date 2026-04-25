@@ -1,0 +1,347 @@
+Script started on 2026-03-21 16:18:43-04:00
+]0;wpl3a@udc-an40-13:/home/wpl3a/DS_6050/projectbash-4.4$pu[Kython runner.py
+Dataset ready.
+
+Dataset verification
+-----------------------------
+Total dataset: 33569
+Training images: 25331
+Test images: 8238
+
+ Training distribution
+----------------------------------------
+MEL  : 17.85%
+NV   : 50.83%
+BCC  : 13.12%
+BKL  : 10.36%
+AK   : 3.42%
+SCC  : 2.48%
+VASC : 1.00%
+DF   : 0.94%
+
+ Test distribution
+----------------------------------------
+MEL  : 40.96%
+NV   : 30.29%
+BCC  : 11.84%
+BKL  : 8.01%
+AK   : 4.54%
+SCC  : 2.00%
+VASC : 1.26%
+DF   : 1.10%
+
+Split verification
+-----------------------------
+Train size: 20264
+Val size: 5067
+
+ Train distribution
+----------------------------------------
+MEL  : 17.85%
+NV   : 50.83%
+BCC  : 13.12%
+BKL  : 10.36%
+AK   : 3.42%
+SCC  : 2.48%
+VASC : 1.00%
+DF   : 0.94%
+
+ Validation distribution
+----------------------------------------
+MEL  : 17.84%
+NV   : 50.82%
+BCC  : 13.12%
+BKL  : 10.36%
+AK   : 3.43%
+SCC  : 2.49%
+VASC : 0.99%
+DF   : 0.95%
+Using device: cuda
+
+================================================================================
+Training EfficientNet-B0
+================================================================================
+Total parameters: 7,153,096
+Trainable parameters: 7,153,096
+Model size: 27.45 MB
+FLOPs: 0.78 GFLOPs
+Epoch 1 | Train Loss 1081.311 | Val Loss 1.4020 | ACC 0.4837 | BACC 0.3626 | AUC 0.8151
+Per-class AUC:
+MEL: 0.7010
+NV: 0.8585
+BCC: 0.8162
+BKL: 0.6979
+AK: 0.8625
+SCC: 0.7814
+VASC: 0.9348
+DF: 0.8685
+Epoch 2 | Train Loss 905.562 | Val Loss 1.5777 | ACC 0.4285 | BACC 0.4455 | AUC 0.8241
+Per-class AUC:
+MEL: 0.7036
+NV: 0.8560
+BCC: 0.8565
+BKL: 0.6087
+AK: 0.8563
+SCC: 0.8524
+VASC: 0.9607
+DF: 0.8982
+Epoch 3 | Train Loss 802.493 | Val Loss 1.3154 | ACC 0.5194 | BACC 0.4732 | AUC 0.8406
+Per-class AUC:
+MEL: 0.7396
+NV: 0.8755
+BCC: 0.8848
+BKL: 0.6854
+AK: 0.8807
+SCC: 0.8608
+VASC: 0.9516
+DF: 0.8468
+Epoch 4 | Train Loss 727.662 | Val Loss 1.3419 | ACC 0.5429 | BACC 0.4811 | AUC 0.8448
+Per-class AUC:
+MEL: 0.7566
+NV: 0.8710
+BCC: 0.8588
+BKL: 0.7392
+AK: 0.8920
+SCC: 0.8527
+VASC: 0.9420
+DF: 0.8459
+Epoch 5 | Train Loss 674.963 | Val Loss 1.2022 | ACC 0.5627 | BACC 0.4920 | AUC 0.8577
+Per-class AUC:
+MEL: 0.7856
+NV: 0.8740
+BCC: 0.8896
+BKL: 0.7562
+AK: 0.8826
+SCC: 0.8725
+VASC: 0.9636
+DF: 0.8379
+Epoch 6 | Train Loss 641.385 | Val Loss 1.2158 | ACC 0.5597 | BACC 0.5008 | AUC 0.8597
+Per-class AUC:
+MEL: 0.7632
+NV: 0.8814
+BCC: 0.8800
+BKL: 0.7542
+AK: 0.8886
+SCC: 0.8581
+VASC: 0.9786
+DF: 0.8738
+Epoch 7 | Train Loss 598.037 | Val Loss 1.2789 | ACC 0.5571 | BACC 0.5159 | AUC 0.8588
+Per-class AUC:
+MEL: 0.7352
+NV: 0.8754
+BCC: 0.8928
+BKL: 0.7746
+AK: 0.8752
+SCC: 0.8527
+VASC: 0.9725
+DF: 0.8916
+Epoch 8 | Train Loss 574.672 | Val Loss 1.1829 | ACC 0.5765 | BACC 0.5321 | AUC 0.8715
+Per-class AUC:
+MEL: 0.7911
+NV: 0.8860
+BCC: 0.9057
+BKL: 0.7704
+AK: 0.8788
+SCC: 0.8841
+VASC: 0.9607
+DF: 0.8955
+Epoch 9 | Train Loss 531.552 | Val Loss 1.2644 | ACC 0.5615 | BACC 0.5152 | AUC 0.8598
+Per-class AUC:
+MEL: 0.7470
+NV: 0.8795
+BCC: 0.8962
+BKL: 0.7817
+AK: 0.8686
+SCC: 0.8715
+VASC: 0.9686
+DF: 0.8651
+Epoch 10 | Train Loss 513.514 | Val Loss 1.1540 | ACC 0.5972 | BACC 0.5263 | AUC 0.8681
+Per-class AUC:
+MEL: 0.7870
+NV: 0.8892
+BCC: 0.8948
+BKL: 0.7877
+AK: 0.8858
+SCC: 0.8793
+VASC: 0.9516
+DF: 0.8691
+Final EfficientNet Accuracy: 59.719755279257946
+
+================================================================================
+Testing MobileNet Extension
+================================================================================
+================================================================================
+Testing Your Efficient Architecture Implementation
+================================================================================
+
+1. Testing DepthwiseSeparableConv...
+   Input shape: torch.Size([1, 32, 56, 56])
+   Output shape: torch.Size([1, 64, 56, 56])
+   ✓ DepthwiseSeparableConv working!
+
+2. Testing InvertedResidual...
+   Input shape: torch.Size([1, 32, 56, 56])
+   Output shape: torch.Size([1, 32, 56, 56])
+   ✓ InvertedResidual working!
+
+3. Testing MobileNet...
+   Input shape: torch.Size([1, 3, 224, 224])
+   Output shape: torch.Size([1, 8])
+   Total parameters: 1,145,768
+   Trainable parameters: 1,145,768
+   Model size: 4.42 MB
+    inference (ms): 6.38
+   ✓ MobileNet working!
+
+================================================================================
+Model Comparison
+================================================================================
+EfficientNet-B0     : 7.15M params, 27.45 MB, 0.78 GFLOPs
+MobileNetV3-Small   : 1.15M params, 4.42 MB, 0.11 GFLOPs
+ResNet-50           : 23.52M params, 89.94 MB, 8.17 GFLOPs
+
+================================================================================
+Training MobileNetV3-Small
+================================================================================
+Epoch 1 | Train Loss 2407.216 | Val Loss 2.3409 | ACC 0.3031 | BACC 0.2213 | AUC 0.7209
+Per-class AUC:
+MEL: 0.7133
+NV: 0.7321
+BCC: 0.6951
+BKL: 0.6132
+AK: 0.7839
+SCC: 0.6623
+VASC: 0.7451
+DF: 0.8225
+Epoch 2 | Train Loss 1624.205 | Val Loss 1.8680 | ACC 0.3517 | BACC 0.2692 | AUC 0.7386
+Per-class AUC:
+MEL: 0.7186
+NV: 0.7595
+BCC: 0.7434
+BKL: 0.6001
+AK: 0.7906
+SCC: 0.7465
+VASC: 0.8337
+DF: 0.7161
+Epoch 3 | Train Loss 1354.358 | Val Loss 2.3284 | ACC 0.3241 | BACC 0.3197 | AUC 0.7557
+Per-class AUC:
+MEL: 0.7051
+NV: 0.7108
+BCC: 0.7598
+BKL: 0.6201
+AK: 0.8415
+SCC: 0.7670
+VASC: 0.8531
+DF: 0.7882
+Epoch 4 | Train Loss 1246.295 | Val Loss 3.7369 | ACC 0.3406 | BACC 0.2952 | AUC 0.7559
+Per-class AUC:
+MEL: 0.6944
+NV: 0.7509
+BCC: 0.7381
+BKL: 0.6337
+AK: 0.8009
+SCC: 0.7648
+VASC: 0.8217
+DF: 0.8427
+Epoch 5 | Train Loss 1265.014 | Val Loss 1.6689 | ACC 0.4367 | BACC 0.2988 | AUC 0.7465
+Per-class AUC:
+MEL: 0.6667
+NV: 0.7889
+BCC: 0.7698
+BKL: 0.6789
+AK: 0.7817
+SCC: 0.7037
+VASC: 0.8433
+DF: 0.7387
+Epoch 6 | Train Loss 1196.018 | Val Loss 1.7994 | ACC 0.3825 | BACC 0.3232 | AUC 0.7591
+Per-class AUC:
+MEL: 0.7132
+NV: 0.7877
+BCC: 0.7414
+BKL: 0.6040
+AK: 0.8249
+SCC: 0.7155
+VASC: 0.8474
+DF: 0.8388
+Epoch 7 | Train Loss 1134.449 | Val Loss 1.5985 | ACC 0.4598 | BACC 0.3472 | AUC 0.7774
+Per-class AUC:
+MEL: 0.7292
+NV: 0.8036
+BCC: 0.7426
+BKL: 0.6798
+AK: 0.8245
+SCC: 0.7276
+VASC: 0.8759
+DF: 0.8362
+Epoch 8 | Train Loss 1116.391 | Val Loss 1.5853 | ACC 0.4462 | BACC 0.3743 | AUC 0.7906
+Per-class AUC:
+MEL: 0.6962
+NV: 0.8030
+BCC: 0.7970
+BKL: 0.6821
+AK: 0.8420
+SCC: 0.7723
+VASC: 0.8595
+DF: 0.8726
+Epoch 9 | Train Loss 1109.565 | Val Loss 1.6173 | ACC 0.3908 | BACC 0.3742 | AUC 0.7935
+Per-class AUC:
+MEL: 0.7206
+NV: 0.8153
+BCC: 0.7938
+BKL: 0.6453
+AK: 0.8353
+SCC: 0.7733
+VASC: 0.8882
+DF: 0.8759
+Epoch 10 | Train Loss 1102.138 | Val Loss 1.6858 | ACC 0.3937 | BACC 0.3371 | AUC 0.7636
+Per-class AUC:
+MEL: 0.6755
+NV: 0.8144
+BCC: 0.7770
+BKL: 0.6091
+AK: 0.8304
+SCC: 0.7498
+VASC: 0.8116
+DF: 0.8409
+
+Final Validation Accuracy: 0.39%
+Keep working! Check your implementation and try different settings.
+
+================================================================================
+Training ResNet-50
+================================================================================
+Total parameters: 23,524,424
+Trainable parameters: 23,524,424
+Model size: 89.94 MB
+FLOPs: 8.17 GFLOPs
+Epoch 1 | Train Loss 1158.563 | Val Loss 1.5620 | ACC 0.4129 | BACC 0.3487 | AUC 0.7812
+Per-class AUC:
+MEL: 0.7017
+NV: 0.7848
+BCC: 0.7829
+BKL: 0.6695
+AK: 0.8212
+SCC: 0.7552
+VASC: 0.8994
+DF: 0.8351
+Epoch 2 | Train Loss 1032.905 | Val Loss 1.3889 | ACC 0.5080 | BACC 0.3322 | AUC 0.7818
+Per-class AUC:
+MEL: 0.7157
+NV: 0.8290
+BCC: 0.8101
+BKL: 0.6339
+AK: 0.8141
+SCC: 0.7231
+VASC: 0.8721
+DF: 0.8562
+Epoch 3 | Train Loss 976.044 | Val Loss 1.3921 | ACC 0.4839 | BACC 0.4372 | AUC 0.8269
+Per-class AUC:
+MEL: 0.7264
+NV: 0.8496
+BCC: 0.8216
+BKL: 0.6871
+AK: 0.8580
+SCC: 0.8673
+VASC: 0.9250
+DF: 0.8801
+Epoch 4 | Train Loss 920.775 | Val Loss 1.4376
