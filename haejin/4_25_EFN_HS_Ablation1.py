@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-frac = 0.01 
-FREEZE_BB = True
+frac = 1.0
+FREEZE_BB = 'partial' 
 
 # ### Setup and imports
 

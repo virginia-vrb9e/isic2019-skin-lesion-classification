@@ -6,7 +6,7 @@ run:
 	rm -f run.log
 	rm -f wandb/latest-run/*.*
 	rm -f /home/ubuntu/dpy8wq/isic2019/checkpoints/*.*
-	rm all_runs_summary.csv metrics_freezeBB_weighted_ce.csv
+	rm all_runs_summary.csv metrics_freezeBB_weighted_ce.csv || true
 	RUN_ID=$$(date +%Y%m%d_%H%M%S); \
 	LOG="logs/train_$${RUN_ID}.log"; \
 	ZIP="logs/run_bundle_$${RUN_ID}.zip"; \
