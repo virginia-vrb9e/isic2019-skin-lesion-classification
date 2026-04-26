@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
+frac = 0.01 
+FREEZE_BB = True
 
 # ### Setup and imports
 
@@ -27,8 +29,8 @@ if not logger.handlers:
 
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
-logger.info("test")
-
+logger.info(f"frac:       {frac}")
+logger.info(f"FREEZE_BB:  {FREEZE_BB}")
 
 # In[2]:
 
@@ -209,7 +211,7 @@ Config = {
     # model
     "architecture": "efficientnet_b0",  # "resnet-50" | "mobilenetv3_small" | "efficientnet_b0"
     "pretrained":   True,              # False = train from scratch ablation
-    "freeze_bb":    True,             
+    "freeze_bb":    FREEZE_BB,             
     # "True"; freezing entire backbone(FF) 
     # "False"; full fine-tuning(UF) 
     # "partial"; freeze early blocks, train last 2 blocks and classifier (PF)
@@ -602,7 +604,6 @@ for name, df_ in [("TRAIN", train_df), ("VAL", val_df)]:
 # frac 1.0 = 100% FOR FULL RUN
 # frac 0.1 = 10%
 # frac 0.01 = 1%
-frac = 1.0 
 
 if frac != 1.0:
     train_df = train_df.sample(frac=frac, random_state=Config["seed"]).reset_index(drop=True)
