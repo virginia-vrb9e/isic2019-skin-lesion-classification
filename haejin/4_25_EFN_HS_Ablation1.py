@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
+
+# In[ ]:
+
+
 frac = 1.0
-FREEZE_BB = 'partial' 
+FREEZE_BB = False 
+LOSS_FN = "weighted_ce"
+
 
 # ### Setup and imports
 
@@ -29,8 +35,8 @@ if not logger.handlers:
 
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
-logger.info(f"frac:       {frac}")
-logger.info(f"FREEZE_BB:  {FREEZE_BB}")
+logger.info("test")
+
 
 # In[2]:
 
@@ -133,7 +139,9 @@ if not logger.handlers:
 
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
-logger.info("test")
+logger.info(f"frac:       {frac}")
+logger.info(f"FREEZE_BB:  {FREEZE_BB}")
+logger.info(f"LOSS_FN: {LOSS_FN}")
 
 
 # In[4]:
@@ -218,7 +226,7 @@ Config = {
     # for Ablation study 1: fine-tuning depth. 
     # Hypothesis: UF improves BACC by +10–20% over FF
 
-    "loss_fn":      "weighted_ce",      # "ce" | "weighted_ce" (baseline) | "focal"
+    "loss_fn":      LOSS_FN,      # "ce" | "weighted_ce" (baseline) | "focal"
     "augmentation": "standard",         # keep "standard" as default 
     "img_size":     224,
     "batch_size":   32,       
