@@ -5,8 +5,9 @@
 
 
 frac = 1.0
-FREEZE_BB = False 
+FREEZE_BB = 'partial'
 LOSS_FN = "weighted_ce"
+FREEZE_UP_TO = 3
 
 
 # ### Setup and imports
@@ -364,6 +365,8 @@ from torchvision.models import efficientnet_b0
 # from torchvision.models import mobilenet_v3_small
 
 def build_model(num_classes=Config["num_classes"]):
+    global FREEZE_UP_TO
+    logger.info(f"FREEZE_UP_TO: {FREEZE_UP_TO}")
     weights = "IMAGENET1K_V1" if Config["pretrained"] else None
 
     # MODIfIED FOR EFFICIENTNET_B0
@@ -374,7 +377,7 @@ def build_model(num_classes=Config["num_classes"]):
     # EfficientNet_BO architecture has 8 blocks/layers;
     # blocks 0 to 5 are frozen in 'partial' fine tuning 
     # blocks 6 - 8 are last MBConv and head conv; trainable in 'partial' fine tuning
-    FREEZE_UP_TO = 6 
+    # FREEZE_UP_TO = 6 # Moved to top of file
 
     if freeze_bb is True: 
         # freeze entire backbone and train classifier head only
