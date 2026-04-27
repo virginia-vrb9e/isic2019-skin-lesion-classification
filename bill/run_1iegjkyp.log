@@ -1,0 +1,252 @@
+2026-04-26 18:14:15,596 | INFO | Loaded logger
+2026-04-26 18:14:15,604 | INFO | Starting setup and imports
+2026-04-26 18:14:26,719 | INFO | Imports OK
+2026-04-26 18:14:26,866 | INFO | Setup and imports complete
+2026-04-26 18:14:26,993 | INFO | Data files already present, skipping download and unzip
+2026-04-26 18:14:26,998 | INFO | Data ready - downloaded and unzipped.
+2026-04-26 18:14:27,178 | INFO | Device: cuda
+2026-04-26 18:14:27,179 | INFO | Config: {'architecture': 'mobilenetv3_small', 'pretrained': True, 'freeze_bb': 'partial', 'loss_fn': 'focal', 'augmentation': 'standard', 'img_size': 224, 'batch_size': 8, 'epochs': 30, 'lr': 0.0001, 'val_split': 0.2, 'patience': 10, 'seed': 42, 'classes': ['MEL', 'NV', 'BCC', 'AK', 'BKL', 'DF', 'VASC', 'SCC'], 'dropout': 0.2, 'min_delta': 0.001, 'num_classes': 8}
+2026-04-26 18:14:27,197 | INFO | Seed set to 42
+2026-04-26 18:14:27,693 | INFO | Model loaded OK
+2026-04-26 18:14:27,695 | INFO | <class 'torchvision.models.mobilenetv3.MobileNetV3'>
+2026-04-26 18:14:27,777 | INFO | Split complete: Train: 20264 | Val: 5067 | Test: 8238
+2026-04-26 18:14:27,783 | INFO | Class frequencies:
+2026-04-26 18:14:27,786 | INFO | 
+TRAIN (20264 images):
+2026-04-26 18:14:27,787 | INFO |   MEL   :  3618  (17.9%)
+2026-04-26 18:14:27,788 | INFO |   NV    : 10300  (50.8%)
+2026-04-26 18:14:27,789 | INFO |   BCC   :  2658  (13.1%)
+2026-04-26 18:14:27,789 | INFO |   AK    :   694  ( 3.4%)
+2026-04-26 18:14:27,790 | INFO |   BKL   :  2099  (10.4%)
+2026-04-26 18:14:27,791 | INFO |   DF    :   191  ( 0.9%)
+2026-04-26 18:14:27,792 | INFO |   VASC  :   202  ( 1.0%)
+2026-04-26 18:14:27,793 | INFO |   SCC   :   502  ( 2.5%)
+2026-04-26 18:14:27,794 | INFO | 
+VAL (5067 images):
+2026-04-26 18:14:27,795 | INFO |   MEL   :   904  (17.8%)
+2026-04-26 18:14:27,796 | INFO |   NV    :  2575  (50.8%)
+2026-04-26 18:14:27,796 | INFO |   BCC   :   665  (13.1%)
+2026-04-26 18:14:27,797 | INFO |   AK    :   173  ( 3.4%)
+2026-04-26 18:14:27,798 | INFO |   BKL   :   525  (10.4%)
+2026-04-26 18:14:27,798 | INFO |   DF    :    48  ( 0.9%)
+2026-04-26 18:14:27,799 | INFO |   VASC  :    51  ( 1.0%)
+2026-04-26 18:14:27,800 | INFO |   SCC   :   126  ( 2.5%)
+2026-04-26 18:14:27,804 | INFO | Subset — train: 20264, val: 5067, test: 8238
+2026-04-26 18:14:27,805 | INFO | Working with 100.00% of data
+2026-04-26 18:14:27,833 | INFO | Dataset loaders ready!
+2026-04-26 18:14:27,852 | INFO | Class counts:
+label
+0     3618
+1    10300
+2     2658
+3      694
+4     2099
+5      191
+6      202
+7      502
+Name: count, dtype: int64
+2026-04-26 18:14:27,852 | INFO | 
+Total samples: 20264
+2026-04-26 18:14:27,853 | INFO | Raw inverse weights: [2.76395799e-04 9.70873786e-05 3.76222724e-04 1.44092219e-03
+ 4.76417342e-04 5.23560209e-03 4.95049505e-03 1.99203187e-03]
+2026-04-26 18:14:28,015 | INFO | Normalized class weights: tensor([0.1489, 0.0523, 0.2027, 0.7765, 0.2567, 2.8214, 2.6678, 1.0735],
+       device='cuda:0')
+2026-04-26 18:14:28,031 | INFO | Sum of weights: 8.0
+2026-04-26 18:14:28,033 | INFO | Class 0: count=3618, weight=0.1489
+2026-04-26 18:14:28,034 | INFO | Class 1: count=10300, weight=0.0523
+2026-04-26 18:14:28,034 | INFO | Class 2: count=2658, weight=0.2027
+2026-04-26 18:14:28,035 | INFO | Class 3: count=694, weight=0.7765
+2026-04-26 18:14:28,036 | INFO | Class 4: count=2099, weight=0.2567
+2026-04-26 18:14:28,036 | INFO | Class 5: count=191, weight=2.8214
+2026-04-26 18:14:28,037 | INFO | Class 6: count=202, weight=2.6678
+2026-04-26 18:14:28,038 | INFO | Class 7: count=502, weight=1.0735
+2026-04-26 18:14:28,039 | INFO | Loss function: FocalLoss()
+2026-04-26 18:14:28,040 | INFO | Unique labels: [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7)]
+2026-04-26 18:14:30,977 | INFO | 
+Training | pretrained=True | loss=focal
+
+2026-04-26 18:21:35,524 | INFO | Epoch   1/30 | loss=0.1203 | acc=0.1812 | bacc=0.4627 | sens=0.4627 | spec=0.8904 | prec=0.3191 | rec=0.4627 | f1=0.1849 | auc=0.8283
+2026-04-26 18:21:35,554 | INFO |   saved
+2026-04-26 18:28:40,053 | INFO | Epoch   2/30 | loss=0.0891 | acc=0.1936 | bacc=0.4539 | sens=0.4539 | spec=0.8929 | prec=0.2983 | rec=0.4539 | f1=0.1718 | auc=0.8378
+2026-04-26 18:28:40,055 | INFO |   (no improve 1/10)
+2026-04-26 18:35:39,751 | INFO | Epoch   3/30 | loss=0.0767 | acc=0.2266 | bacc=0.4800 | sens=0.4800 | spec=0.8980 | prec=0.3141 | rec=0.4800 | f1=0.2062 | auc=0.8433
+2026-04-26 18:35:39,776 | INFO |   saved
+2026-04-26 18:42:43,365 | INFO | Epoch   4/30 | loss=0.0670 | acc=0.2731 | bacc=0.5116 | sens=0.5116 | spec=0.9026 | prec=0.3320 | rec=0.5116 | f1=0.2500 | auc=0.8568
+2026-04-26 18:42:43,409 | INFO |   saved
+2026-04-26 18:49:40,331 | INFO | Epoch   5/30 | loss=0.0634 | acc=0.2362 | bacc=0.4936 | sens=0.4936 | spec=0.8977 | prec=0.3132 | rec=0.4936 | f1=0.2285 | auc=0.8499
+2026-04-26 18:49:40,333 | INFO |   (no improve 1/10)
+2026-04-26 18:56:42,504 | INFO | Epoch   6/30 | loss=0.0569 | acc=0.3168 | bacc=0.5472 | sens=0.5472 | spec=0.9086 | prec=0.3350 | rec=0.5472 | f1=0.2783 | auc=0.8607
+2026-04-26 18:56:42,529 | INFO |   saved
+2026-04-26 19:03:38,450 | INFO | Epoch   7/30 | loss=0.0531 | acc=0.3023 | bacc=0.5469 | sens=0.5469 | spec=0.9062 | prec=0.3280 | rec=0.5469 | f1=0.2828 | auc=0.8560
+2026-04-26 19:03:38,452 | INFO |   (no improve 1/10)
+2026-04-26 19:10:42,041 | INFO | Epoch   8/30 | loss=0.0507 | acc=0.3353 | bacc=0.5620 | sens=0.5620 | spec=0.9100 | prec=0.3409 | rec=0.5620 | f1=0.2980 | auc=0.8692
+2026-04-26 19:10:42,079 | INFO |   saved
+2026-04-26 19:17:35,328 | INFO | Epoch   9/30 | loss=0.0460 | acc=0.3552 | bacc=0.5837 | sens=0.5837 | spec=0.9116 | prec=0.3595 | rec=0.5837 | f1=0.3329 | auc=0.8737
+2026-04-26 19:17:35,358 | INFO |   saved
+2026-04-26 19:24:27,842 | INFO | Epoch  10/30 | loss=0.0431 | acc=0.3560 | bacc=0.5868 | sens=0.5868 | spec=0.9125 | prec=0.3485 | rec=0.5868 | f1=0.3247 | auc=0.8737
+2026-04-26 19:24:27,866 | INFO |   saved
+2026-04-26 19:31:31,122 | INFO | Epoch  11/30 | loss=0.0416 | acc=0.3440 | bacc=0.5750 | sens=0.5750 | spec=0.9110 | prec=0.3352 | rec=0.5750 | f1=0.3022 | auc=0.8716
+2026-04-26 19:31:31,124 | INFO |   (no improve 1/10)
+2026-04-26 19:38:21,439 | INFO | Epoch  12/30 | loss=0.0370 | acc=0.3136 | bacc=0.5734 | sens=0.5734 | spec=0.9062 | prec=0.3427 | rec=0.5734 | f1=0.3070 | auc=0.8691
+2026-04-26 19:38:21,440 | INFO |   (no improve 2/10)
+2026-04-26 19:45:11,807 | INFO | Epoch  13/30 | loss=0.0364 | acc=0.3631 | bacc=0.5955 | sens=0.5955 | spec=0.9135 | prec=0.3542 | rec=0.5955 | f1=0.3186 | auc=0.8835
+2026-04-26 19:45:11,831 | INFO |   saved
+2026-04-26 19:51:59,756 | INFO | Epoch  14/30 | loss=0.0311 | acc=0.3635 | bacc=0.6091 | sens=0.6091 | spec=0.9128 | prec=0.3532 | rec=0.6091 | f1=0.3285 | auc=0.8821
+2026-04-26 19:51:59,781 | INFO |   saved
+2026-04-26 19:59:08,465 | INFO | Epoch  15/30 | loss=0.0309 | acc=0.4050 | bacc=0.6246 | sens=0.6246 | spec=0.9180 | prec=0.3675 | rec=0.6246 | f1=0.3631 | auc=0.8895
+2026-04-26 19:59:08,504 | INFO |   saved
+2026-04-26 20:06:08,201 | INFO | Epoch  16/30 | loss=0.0293 | acc=0.3854 | bacc=0.6097 | sens=0.6097 | spec=0.9156 | prec=0.3611 | rec=0.6097 | f1=0.3520 | auc=0.8853
+2026-04-26 20:06:08,202 | INFO |   (no improve 1/10)
+2026-04-26 20:12:58,529 | INFO | Epoch  17/30 | loss=0.0265 | acc=0.3862 | bacc=0.6143 | sens=0.6143 | spec=0.9160 | prec=0.3824 | rec=0.6143 | f1=0.3549 | auc=0.8875
+2026-04-26 20:12:58,531 | INFO |   (no improve 2/10)
+2026-04-26 20:19:48,855 | INFO | Epoch  18/30 | loss=0.0252 | acc=0.3637 | bacc=0.6159 | sens=0.6159 | spec=0.9125 | prec=0.3579 | rec=0.6159 | f1=0.3412 | auc=0.8826
+2026-04-26 20:19:48,860 | INFO |   (no improve 3/10)
+2026-04-26 20:26:41,653 | INFO | Epoch  19/30 | loss=0.0251 | acc=0.4058 | bacc=0.6311 | sens=0.6311 | spec=0.9174 | prec=0.3704 | rec=0.6311 | f1=0.3777 | auc=0.8905
+2026-04-26 20:26:41,695 | INFO |   saved
+2026-04-26 20:33:38,318 | INFO | Epoch  20/30 | loss=0.0223 | acc=0.4294 | bacc=0.6358 | sens=0.6358 | spec=0.9207 | prec=0.3760 | rec=0.6358 | f1=0.3826 | auc=0.8914
+2026-04-26 20:33:38,368 | INFO |   saved
+2026-04-26 20:40:35,206 | INFO | Epoch  21/30 | loss=0.0221 | acc=0.3754 | bacc=0.6287 | sens=0.6287 | spec=0.9137 | prec=0.3710 | rec=0.6287 | f1=0.3628 | auc=0.8872
+2026-04-26 20:40:35,208 | INFO |   (no improve 1/10)
+2026-04-26 20:49:26,790 | INFO | Epoch  22/30 | loss=0.0212 | acc=0.4206 | bacc=0.6503 | sens=0.6503 | spec=0.9196 | prec=0.3808 | rec=0.6503 | f1=0.3844 | auc=0.8926
+2026-04-26 20:49:26,830 | INFO |   saved
+2026-04-26 20:56:42,285 | INFO | Epoch  23/30 | loss=0.0199 | acc=0.4375 | bacc=0.6599 | sens=0.6599 | spec=0.9216 | prec=0.3972 | rec=0.6599 | f1=0.4103 | auc=0.8966
+2026-04-26 20:56:42,319 | INFO |   saved
+2026-04-26 21:03:42,046 | INFO | Epoch  24/30 | loss=0.0198 | acc=0.4247 | bacc=0.6493 | sens=0.6493 | spec=0.9200 | prec=0.3898 | rec=0.6493 | f1=0.3967 | auc=0.8944
+2026-04-26 21:03:42,047 | INFO |   (no improve 1/10)
+2026-04-26 21:10:33,521 | INFO | Epoch  25/30 | loss=0.0182 | acc=0.4405 | bacc=0.6553 | sens=0.6553 | spec=0.9219 | prec=0.4060 | rec=0.6553 | f1=0.4182 | auc=0.8963
+2026-04-26 21:10:33,523 | INFO |   (no improve 2/10)
+2026-04-26 21:17:45,609 | INFO | Epoch  26/30 | loss=0.0195 | acc=0.4217 | bacc=0.6522 | sens=0.6522 | spec=0.9196 | prec=0.3913 | rec=0.6522 | f1=0.3983 | auc=0.8966
+2026-04-26 21:17:45,614 | INFO |   (no improve 3/10)
+2026-04-26 21:25:35,661 | INFO | Epoch  27/30 | loss=0.0177 | acc=0.4190 | bacc=0.6485 | sens=0.6485 | spec=0.9191 | prec=0.3959 | rec=0.6485 | f1=0.4032 | auc=0.8966
+2026-04-26 21:25:35,663 | INFO |   (no improve 4/10)
+2026-04-26 21:34:20,665 | INFO | Epoch  28/30 | loss=0.0181 | acc=0.4024 | bacc=0.6455 | sens=0.6455 | spec=0.9170 | prec=0.3834 | rec=0.6455 | f1=0.3849 | auc=0.8952
+2026-04-26 21:34:20,666 | INFO |   (no improve 5/10)
+2026-04-26 21:41:52,456 | INFO | Epoch  29/30 | loss=0.0170 | acc=0.4227 | bacc=0.6576 | sens=0.6576 | spec=0.9196 | prec=0.3971 | rec=0.6576 | f1=0.4056 | auc=0.8974
+2026-04-26 21:41:52,458 | INFO |   (no improve 6/10)
+2026-04-26 21:48:46,678 | INFO | Epoch  30/30 | loss=0.0172 | acc=0.4296 | bacc=0.6531 | sens=0.6531 | spec=0.9206 | prec=0.3958 | rec=0.6531 | f1=0.4037 | auc=0.8979
+2026-04-26 21:48:46,703 | INFO |   (no improve 7/10)
+2026-04-26 21:48:46,704 | INFO | 
+Per-class AUC:
+2026-04-26 21:48:46,705 | INFO |   MEL: 0.7504 | 
+2026-04-26 21:48:46,705 | INFO |   NV: 0.8962 | 
+2026-04-26 21:48:46,706 | INFO |   BCC: 0.9252 | 
+2026-04-26 21:48:46,707 | INFO |   AK: 0.9451 | 
+2026-04-26 21:48:46,707 | INFO |   BKL: 0.7699 | 
+2026-04-26 21:48:46,708 | INFO |   DF: 0.9476 | 
+2026-04-26 21:48:46,709 | INFO |   VASC: 0.9993 | 
+2026-04-26 21:48:46,709 | INFO |   SCC: 0.9497 | 
+2026-04-26 21:48:46,710 | INFO | 
+2026-04-26 21:48:46,711 | INFO | 
+Done in 214.3 min
+2026-04-26 21:48:46,712 | INFO | Best  | epoch=23 | bacc=0.6599
+2026-04-26 21:48:46,712 | INFO | Final | acc=0.4296 | bacc=0.6531 | sens=0.6531 | spec=0.9206 | prec_macro=0.3958 | rec_macro=0.6531 | f1_macro=0.4037 | prec_wtd=0.6882 | rec_wtd=0.4296 | f1_wtd=0.4532 | auc=0.8979
+2026-04-26 21:48:46,713 | INFO | 
+Confusion Matrix — Final Epoch
+2026-04-26 21:48:46,714 | INFO |         MEL     NV    BCC     AK    BKL     DF   VASC    SCC
+2026-04-26 21:48:46,715 | INFO |    MEL    457     23     23    117    186     30     13     55
+2026-04-26 21:48:46,715 | INFO |     NV    630    819    129    127    595    125     81     69
+2026-04-26 21:48:46,716 | INFO |    BCC     10      2    284    185     34     22     17    111
+2026-04-26 21:48:46,717 | INFO |     AK      1      0      4    143      8      3      0     14
+2026-04-26 21:48:46,718 | INFO |    BKL     40      3     15    110    286     11      2     58
+2026-04-26 21:48:46,719 | INFO |     DF      0      0      2      3      0     40      0      3
+2026-04-26 21:48:46,719 | INFO |   VASC      0      0      0      0      0      0     51      0
+2026-04-26 21:48:46,720 | INFO |    SCC      1      0      3     19      4      2      0     97
+2026-04-26 21:48:47,516 | INFO | Confusion matrix saved → /scratch/wpl3a/isic2019/checkpoints/confusion_matrix_final.png
+2026-04-26 21:49:54,198 | INFO | 
+Confusion Matrix — Best Epoch (23)
+2026-04-26 21:49:54,200 | INFO |         MEL     NV    BCC     AK    BKL     DF   VASC    SCC
+2026-04-26 21:49:54,201 | INFO |    MEL    470     27     31    106    166     28     11     65
+2026-04-26 21:49:54,202 | INFO |     NV    582    850    144     85    621    121     77     95
+2026-04-26 21:49:54,203 | INFO |    BCC     12      2    277    184     34     20     12    124
+2026-04-26 21:49:54,204 | INFO |     AK      1      0      4    137      8      4      0     19
+2026-04-26 21:49:54,204 | INFO |    BKL     42      2     18    100    290      9      2     62
+2026-04-26 21:49:54,205 | INFO |     DF      0      0      2      1      1     42      0      2
+2026-04-26 21:49:54,206 | INFO |   VASC      0      0      0      0      0      0     51      0
+2026-04-26 21:49:54,206 | INFO |    SCC      1      0      3     17      5      0      0    100
+2026-04-26 21:49:54,589 | INFO | Confusion matrix saved → /scratch/wpl3a/isic2019/checkpoints/confusion_matrix_best.png
+2026-04-26 21:49:54,745 | INFO | History saved to /scratch/wpl3a/isic2019/checkpoints/history.json
+2026-04-26 21:49:54,753 | INFO | 
+Done in 215.4 min
+2026-04-26 21:49:54,754 | INFO | Best   | epoch=23 | bacc=0.6599
+2026-04-26 21:49:54,755 | INFO | Final  | acc=0.4296 | bacc=0.6531 | sens=0.6599 | spec=0.9216 | f1=0.4103 | auc=0.8979
+2026-04-26 21:49:54,755 | INFO | 
+Per-class AUC:
+2026-04-26 21:49:54,756 | INFO |   MEL: 0.7560 | 
+2026-04-26 21:49:54,757 | INFO |   NV: 0.8973 | 
+2026-04-26 21:49:54,758 | INFO |   BCC: 0.9220 | 
+2026-04-26 21:49:54,758 | INFO |   AK: 0.9432 | 
+2026-04-26 21:49:54,759 | INFO |   BKL: 0.7616 | 
+2026-04-26 21:49:54,760 | INFO |   DF: 0.9453 | 
+2026-04-26 21:49:54,760 | INFO |   VASC: 0.9988 | 
+2026-04-26 21:49:54,761 | INFO |   SCC: 0.9486 | 
+2026-04-26 21:49:54,762 | INFO | 
+2026-04-26 21:49:54,764 | INFO | 
+History saved to /scratch/wpl3a/isic2019/checkpoints/history.json
+2026-04-26 21:50:56,089 | INFO | 
+=== Benchmark: mobilenet_v3_small (focal, aug=standard) ===
+2026-04-26 21:50:56,091 | INFO |   params_total: 1526056
+2026-04-26 21:50:56,092 | INFO |   params_trainable: 1520984
+2026-04-26 21:50:56,092 | INFO |   size_mb: 5.82
+2026-04-26 21:50:56,093 | INFO |   inference_ms: 6.62
+2026-04-26 21:50:56,094 | INFO |   gflops: None
+2026-04-26 21:50:57,478 | INFO | Checkpoint artifact logged to W&B
+2026-04-26 21:51:00,656 | INFO | W&B run finished.
+2026-04-26 21:51:00,661 | INFO | History saved to /scratch/wpl3a/isic2019/checkpoints/history.json
+2026-04-26 21:51:23,501 | INFO | Saved: all_runs_summary.csv
+2026-04-26 21:51:23,700 | INFO | Saved metrics to: metrics_mbnt_partial_focal.csv
+2026-04-26 21:51:44,598 | INFO | Saved: all_runs_summary.csv
+2026-04-26 21:51:44,599 | INFO |        run_id                                               name     state  \
+109  erja2blp                  efficientnet_b0_weighted_ce_False  finished   
+112  f2qtd9vd                efficientnet_b0_weighted_ce_partial  finished   
+110  7kfcl38j  mobilenetv3_small_weighted_ce_standard_pretrai...  finished   
+16   1dl5ps9o  mobilenet_v3_small_weighted_ce_standard_pretra...  finished   
+79   78ol5tlu  mobilenetv3_small_weighted_ce_standard_pretrai...  finished   
+
+           architecture      loss_fn augmentation pretrained freeze_bb  \
+109     efficientnet_b0  weighted_ce     standard       True     False   
+112     efficientnet_b0  weighted_ce     standard       True   partial   
+110   mobilenetv3_small  weighted_ce     standard       True   partial   
+16   mobilenet_v3_small  weighted_ce     standard       True     False   
+79    mobilenetv3_small  weighted_ce     standard       True     False   
+
+         lr  batch_size  best_bacc  best_acc  best_f1_macro  best_auc_macro  \
+109  0.0001        32.0   0.806599  0.819420       0.776243        0.973871   
+112  0.0001        32.0   0.801172  0.803039       0.756416        0.966503   
+110  0.0001         8.0   0.739414  0.761792       0.694591        0.956312   
+16   0.0001        32.0   0.738802       NaN            NaN             NaN   
+79   0.0001         8.0   0.732075  0.756266       0.681286        0.951265   
+
+     best_precision  best_recall     params  inference_ms  
+109        0.750562     0.806599  4017796.0          8.10  
+112        0.721323     0.801172  4017796.0          7.89  
+110        0.660309     0.739414  1526056.0         10.12  
+16              NaN          NaN  1526056.0          6.88  
+79         0.648019     0.732075  1526056.0          6.75  
+2026-04-26 21:52:08,020 | INFO | Data loaded:
+2026-04-26 21:52:08,021 | INFO |       run_id                                               name  \
+5   7zi5n5tq  mobilenet_v3_small_weighted_ce_standard_pretra...   
+8   v0ii2tcd  mobilenet_v3_small_weighted_ce_standard_pretra...   
+16  1dl5ps9o  mobilenet_v3_small_weighted_ce_standard_pretra...   
+29  nzuy2c16  mobilenet_v3_small_weighted_ce_standard_pretra...   
+32  ian0rllh  mobilenet_v3_small_weighted_ce_standard_pretra...   
+
+          architecture      loss_fn augmentation pretrained freeze_bb    lr  \
+5   mobilenet_v3_small  weighted_ce     standard       True      None  None   
+8   mobilenet_v3_small  weighted_ce     standard       True      None  None   
+16  mobilenet_v3_small  weighted_ce     standard       True      None  None   
+29  mobilenet_v3_small  weighted_ce     standard       True      None  None   
+32  mobilenet_v3_small  weighted_ce     standard       True      None  None   
+
+   batch_size  best_bacc  best_acc  best_f1_macro  best_auc_macro  \
+5        None   0.413059       NaN            NaN             NaN   
+8        None   0.329269       NaN            NaN             NaN   
+16       None   0.738802       NaN            NaN             NaN   
+29       None   0.391510       NaN            NaN             NaN   
+32       None   0.277441       NaN            NaN             NaN   
+
+    best_precision  best_recall     params  inference_ms  
+5              NaN          NaN  1526056.0          6.13  
+8              NaN          NaN  1526056.0          5.31  
+16             NaN          NaN  1526056.0          6.88  
+29             NaN          NaN  1526056.0          5.89  
+32             NaN          NaN  1526056.0          5.43  
