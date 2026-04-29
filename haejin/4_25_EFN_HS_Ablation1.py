@@ -4,10 +4,11 @@
 # In[ ]:
 
 
-frac = 1.0
-FREEZE_BB = 'partial'
+frac = 1.0 
+FREEZE_BB = False 
 LOSS_FN = "weighted_ce"
 FREEZE_UP_TO = 3
+NUM_WORKERS=4
 
 
 # ### Setup and imports
@@ -635,12 +636,13 @@ train_ds = ISICDataset(train_df, TRAIN_DIR, get_transforms("train"))
 val_ds   = ISICDataset(val_df,   TRAIN_DIR, get_transforms("val"))
 test_ds  = ISICDataset(test_df,  TEST_DIR,  get_transforms("test"))
 
+
 # Dataloaders
 train_loader = DataLoader(
     train_ds,
     batch_size=Config["batch_size"],
     shuffle=True,
-    num_workers=0,
+    num_workers=NUM_WORKERS,
     pin_memory=True
 )
 
@@ -648,7 +650,7 @@ val_loader = DataLoader(
     val_ds,
     batch_size=Config["batch_size"],
     shuffle=False,
-    num_workers=0,
+    num_workers=NUM_WORKERS,
     pin_memory=True
 )
 
@@ -656,7 +658,7 @@ test_loader = DataLoader(
     test_ds,
     batch_size=Config["batch_size"],
     shuffle=False,
-    num_workers=0,
+    num_workers=NUM_WORKERS,
     pin_memory=True
 )
 
