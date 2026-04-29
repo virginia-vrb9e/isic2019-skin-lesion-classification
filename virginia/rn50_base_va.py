@@ -805,13 +805,16 @@ def main():
                 f"_sch={Config.get('scheduler')}"
             ),
             config={**Config,
-                    "architecture": args.arch,
-                    "freeze_bb": args.freeze_bb,
-                    "loss_fn": args.loss_fn,
-                    "dropout": args.dropout,
-                    "augmentation": args.aug,
-                    "epochs": args.num_epochs,
-                    "mode": args.freeze_bb},
+                "architecture": args.arch,
+                "freeze_bb": args.freeze_bb,
+                "dropout": args.dropout,
+                "augmentation": args.aug,
+                "loss_fn": args.loss_fn,
+                "batch_size": args.batch_size,
+                "epochs": args.num_epochs,
+                "mode": args.freeze_bb,
+                "lr": args.lr,
+                "num_workers": args.num_workers},
         )
 
     history = train_model(
