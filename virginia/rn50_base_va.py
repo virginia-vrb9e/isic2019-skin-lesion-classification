@@ -36,6 +36,7 @@ import os
 import argparse  # for command-line argument parsing
 import random
 import time
+import json
 
 import torch
 import torch.nn as nn
@@ -50,6 +51,34 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import (balanced_accuracy_score, f1_score, roc_auc_score,
                              confusion_matrix, precision_score, recall_score, roc_curve)
+
+
+# ------------------------------------------------------------------
+# ADD LOGGING
+# ------------------------------------------------------------------
+import logging
+
+import sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+if not logger.handlers:
+
+    console_handler = logging.StreamHandler(sys.stdout)  # ← fix
+    file_handler = logging.FileHandler("run.log")
+
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(message)s"
+    )
+
+    console_handler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
+logger.info("test")
+os.environ["WANDB_CONSOLE"] = "wrap"
 
 # ------------------------------------------------------------------
 # Expected Directory Structure
@@ -149,9 +178,10 @@ Config = {
     "num_workers":  4,              # may need to change this
     "val_split":    0.20,
     "seed":         42,
-    "data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
+    #"data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
+    "data_dir":     os.path.expanduser("/home/ubuntu/dpy8wq/isic2019/ISIC_2019_mini_folder/"),
     "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
-    "mini-run":     False,  # True = use 10% of data | False = use 100%
+    "mini-run":     True,  #False,  # True = use 10% of data | False = use 100%
 
     # --- more ablation options ---
     "patience":     None,                 # early stopping after N epochs no improvement
@@ -354,7 +384,7 @@ def set_seeds_to(seed):
 def set_up(seed, data_dir):
     set_seeds_to(seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Accelerator: {device}")
+    logger.info(f"Accelerator: {device}")
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     base_ds = datasets.ImageFolder(data_dir)  # stratified data directory
@@ -566,8 +596,8 @@ def train_model(device, model, train_loader, val_loader,
     run_name = None     # set once wandb is active
     
     for epoch in range(num_epochs):
-        print(f"\nEpoch {epoch+1}/{num_epochs}")
-        print("-" * 30)
+        logger.info(f"\nEpoch {epoch+1}/{num_epochs}")
+        logger.info("-" * 30)
         train_loss, train_acc = train_epoch(
             model, train_loader, criterion, optimizer, device, feature_extract,
         )
@@ -582,9 +612,9 @@ def train_model(device, model, train_loader, val_loader,
         history["val_bacc"].append(val_metrics["bacc"])
         history["val_f1_macro"].append(val_metrics["f1_macro"])
 
-        print(f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.2f}%")
-        print(f"Val   Loss: {val_loss:.4f}  Val   Acc: {val_acc:.2f}%")
-        print(f"Val   BACC: {val_metrics['bacc']:.4f}  Val   F1: {val_metrics['f1_macro']:.4f}")
+        logger.info(f"Train Loss: {train_loss:.4f}  Train Acc: {train_acc:.2f}%")
+        logger.info(f"Val   Loss: {val_loss:.4f}  Val   Acc: {val_acc:.2f}%")
+        logger.info(f"Val   BACC: {val_metrics['bacc']:.4f}  Val   F1: {val_metrics['f1_macro']:.4f}")
 
         # check before updating BACC: 
         improved = val_metrics["bacc"] > best_bacc
@@ -676,7 +706,7 @@ def train_model(device, model, train_loader, val_loader,
             else: 
                 patience_counter += 1
                 if patience_counter >= patience:
-                    print(f"Early stopping at epoch {epoch +1} (no BACC improvement for {patience} epochs)")
+                    logger.info(f"Early stopping at epoch {epoch +1} (no BACC improvement for {patience} epochs)")
                     break
                     
     # --- final confusion matrix (last epoch) ---
@@ -762,8 +792,8 @@ def main():
     Config["step_size"]  = args.step_size
     Config["gamma"]      = args.gamma
 
-    print("\nStarting Main Script...")
-    print(f"Config: {Config}")
+    logger.info("\nStarting Main Script...")
+    logger.info(f"Config: {json.dumps(Config, indent=4)}")
 
     device, base_ds, train_idx, val_idx = set_up(
         seed=Config["seed"], data_dir=args.data_dir,
@@ -771,7 +801,7 @@ def main():
     if Config.get("mini-run"):
         train_idx = train_idx[:len(train_idx)//10]
         val_idx = val_idx[:len(val_idx)//10]
-        print(f"Mini-run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
+        logger.info(f"Mini-run: {len(train_idx)} training samples; {len(val_idx)} validation samples")
     train_loader, val_loader = make_loaders(
         base_ds, train_idx, val_idx,
         seed=Config["seed"], batch_size=args.batch_size,
@@ -780,7 +810,7 @@ def main():
     )
 
     labels = {"full": "Fully Frozen Backbone", "partial": "Partially Frozen Backbone", "none": "Unfrozen Backbone"}
-    print(f"\n{args.arch} — {labels[args.freeze_bb]}")
+    logger.info(f"\n{args.arch} — {labels[args.freeze_bb]}")
 
     model = get_pretrained_model(
         arch=args.arch,
