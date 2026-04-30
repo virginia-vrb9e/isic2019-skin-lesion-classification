@@ -181,7 +181,7 @@ Config = {
     #"data_dir":     os.path.expanduser("~/Downloads/ISIC_2019_mini"),
     "data_dir":     os.path.expanduser("/home/ubuntu/dpy8wq/isic2019/ISIC_2019_mini_folder/"),
     "classes":      ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"],
-    "mini-run":     True,  #False,  # True = use 10% of data | False = use 100%
+    "mini-run":     False,  # True = use 10% of data | False = use 100%
 
     # --- more ablation options ---
     "patience":     None,                 # early stopping after N epochs no improvement
