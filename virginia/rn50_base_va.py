@@ -31,6 +31,8 @@ Possible Steps (if time allows):
 2. Looking at Fitzpatrick issue
 # --------------------------------------------------------------------
 """
+LEARNING_RATE = 5e-4
+
 
 import os
 import argparse  # for command-line argument parsing
@@ -174,7 +176,7 @@ Config = {
     "img_size":     224,
     "batch_size":   32,
     "epochs":       60,
-    "lr":           1e-4,           # changed from original 1e-3 (consider 1e-5 for FUF)
+    "lr":           LEARNING_RATE, #1e-4,           # changed from original 1e-3 (consider 1e-5 for FUF)
     "num_workers":  4,              # may need to change this
     "val_split":    0.20,
     "seed":         42,
