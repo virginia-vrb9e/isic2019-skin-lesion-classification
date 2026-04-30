@@ -31,8 +31,9 @@ Possible Steps (if time allows):
 2. Looking at Fitzpatrick issue
 # --------------------------------------------------------------------
 """
-LEARNING_RATE = 1e-3
-BATCH_SIZE = 64
+LEARNING_RATE = 1e-4
+BATCH_SIZE = 32 
+DROPOUT = 0.5
 
 
 import os
@@ -173,7 +174,7 @@ Config = {
     "freeze_bb":    "partial",         # "full" = freeze all, "partial" = unfreeze layer4, "none" = train everything
     "augmentation": "standard",     # "none" | "geometric" | "color" | "standard"
     "num_classes":  8,              # 9: includes 'unk' or images that are none-of-the-known-classes
-    "dropout":      0.3,            # 0.0=disabled | E.g.: 0.2=20% RN features dropped b4 classification | to try: 0.05, 0.1, 0,2, 0.3, 0.4, 0.5
+    "dropout":      DROPOUT, #0.3,            # 0.0=disabled | E.g.: 0.2=20% RN features dropped b4 classification | to try: 0.05, 0.1, 0,2, 0.3, 0.4, 0.5
     "img_size":     224,
     "batch_size":   BATCH_SIZE,
     "epochs":       60,
