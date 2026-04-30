@@ -47,3 +47,4 @@ rezip:
 	zip -r "$$ZIP" "$$LOG" run.log wandb weights /home/ubuntu/dpy8wq/isic2019/checkpoints \
 	*.csv rn50_base_va.py *.png
 
+
