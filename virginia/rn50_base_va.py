@@ -31,7 +31,8 @@ Possible Steps (if time allows):
 2. Looking at Fitzpatrick issue
 # --------------------------------------------------------------------
 """
-LEARNING_RATE = 5e-4
+LEARNING_RATE = 1e-3
+BATCH_SIZE = 64
 
 
 import os
@@ -174,7 +175,7 @@ Config = {
     "num_classes":  8,              # 9: includes 'unk' or images that are none-of-the-known-classes
     "dropout":      0.3,            # 0.0=disabled | E.g.: 0.2=20% RN features dropped b4 classification | to try: 0.05, 0.1, 0,2, 0.3, 0.4, 0.5
     "img_size":     224,
-    "batch_size":   32,
+    "batch_size":   BATCH_SIZE,
     "epochs":       60,
     "lr":           LEARNING_RATE, #1e-4,           # changed from original 1e-3 (consider 1e-5 for FUF)
     "num_workers":  4,              # may need to change this
