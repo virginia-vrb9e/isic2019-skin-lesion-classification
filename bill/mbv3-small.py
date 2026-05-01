@@ -6,7 +6,7 @@
 # In[1]:
 
 
-FRAC = 0.01
+FRAC = 1.0 
 FREEZE_BB = "partial"
 LOSS_FN = "weighted_ce"
 FREEZE_UP_TO = 3
