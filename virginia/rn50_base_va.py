@@ -99,37 +99,7 @@ class FocalLoss(nn.Module):
 # -------
 # Config
 # -------
-"""
-    Config Dictionary:
-    - Default values for all training hyperparameters and dataset settings
-    
-    Overridable from the command line (argparse):
-        --data_dir, 
-        --num_epochs, 
-        --batch_size, 
-        --lr, 
-        --num_workers, 
-        --wandb,
-        --freeze_bb, 
-        --dropout,
-        --loss_fn,
 
-    Editable in Config directly:
-        img_size, 
-        val_split, 
-        seed, 
-        mini-run, 
-        num_classes, 
-        classes, 
-        loss_fn,
-        patience 
-
-    Ablation options not yet implemented (commented out in Config):
-        scheduler, 
-        step_size, 
-        gamma
-    
-"""
 # defaults that can be overridden by command-line arguments 
 # or specifying ablation options in the main function call 
 # (IF arparse setup for that arg)
@@ -651,9 +621,8 @@ def train_model(device, model, train_loader, val_loader,
                 
                 # confusion matrix at best epoch
                 fig, ax = plt.subplots(figsize=(10, 8))
-                ConfusionMatrixDisplay(confusion_matrix=best_conf_matrix,
-                                      display_labels=classes).plot(ax=ax, colorbar=False, xticks_rotation=45)
-                ax.set_title(f"Best Confusion Matrix — Epoch {best_epoch}")
+                ConfusionMatrixDisplay(confusion_matrix=val_metrics["conf_matrix"],
+                              display_labels=classes, cmap="Blues").plot(ax=ax, colorbar=True, xticks_rotation=45)
                 wandb.log({"confusion_matrix/best": wandb.Image(fig)})
                 plt.close(fig)
 
