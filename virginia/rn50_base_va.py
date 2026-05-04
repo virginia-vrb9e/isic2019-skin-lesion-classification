@@ -31,9 +31,10 @@ Possible Steps (if time allows):
 2. Looking at Fitzpatrick issue
 # --------------------------------------------------------------------
 """
-LEARNING_RATE = 1e-4
+LEARNING_RATE = 5e-4
 BATCH_SIZE = 32 
-DROPOUT = 0.5
+DROPOUT = 0.3
+SCHEDULER = "step"
 
 
 import os
@@ -191,7 +192,7 @@ Config = {
     "patience":     None,                 # early stopping after N epochs no improvement
     "loss_fn":      "weighted_ce",      # "ce" | "focal" | "weighted_ce"
     
-    "scheduler":    None,             # "step" | "cosine" | None
+    "scheduler":    SCHEDULER,             # "step" | "cosine" | None
     # if "step": these can be changed as well
     "step_size":    5,                  # StepLR step size ("baseline: 5)
     "gamma":        0.1,                # StepLR decay factor (baseline: 0.1)
