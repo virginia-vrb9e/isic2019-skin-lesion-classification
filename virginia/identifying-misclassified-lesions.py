@@ -42,7 +42,7 @@ def main():
     
     # --- calling set_up (imported) for data & device ---
     device, base_ds, _, val_idx = set_up(seed=Config["seed"], data_dir=args.data_dir)
-    classes = Config["classes"]  # ["MEL", "NV", "BCC", "AK", "BKL", "DF", "VASC", "SCC"]
+    classes = base_ds.classes
 
     # --- 5/3 CPU limitation!! optionally subsample stratified val set for speed ---
     # Dual check: (1) max_examples exists; (2) max_examples < total val images
